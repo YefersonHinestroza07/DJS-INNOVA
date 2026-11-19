@@ -5,7 +5,7 @@ export function Modals({
   selectedPropuesta, setSelectedPropuesta,
   showModalNueva, setShowModalNueva,
   nuevaIdea, setNuevaIdea, handleCrearPropuesta,
-  showModalEstrategia, setShowModalEstrategia
+  showModalEstrategia, setShowModalEstrategia, integrantes = []
 }) {
   return (
     <>
@@ -17,7 +17,7 @@ export function Modals({
                 <span className="text-[10px] uppercase tracking-wider text-red-300 font-bold">Ficha Oficial Pitch • 8 Puntos</span>
                 <h3 className="font-bold text-sm leading-snug">{selectedPropuesta.titulo}</h3>
               </div>
-              <button onClick={() => setSelectedPropuesta(null)} className="p-1 bg-white/15 rounded-full"><X className="w-4 h-4" /></button>
+              <button type="button" aria-label="Cerrar ficha" onClick={() => setSelectedPropuesta(null)} className="p-1 bg-white/15 rounded-full"><X className="w-4 h-4" /></button>
             </div>
             <div className="p-4 overflow-y-auto space-y-3 text-xs">
               <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
@@ -49,26 +49,30 @@ export function Modals({
           <form onSubmit={handleCrearPropuesta} role="dialog" aria-modal="true" className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
             <div className="bg-[#DC2626] text-white p-4 flex items-center justify-between">
               <h3 className="font-black text-sm">Registrar Propuesta (Fase 3)</h3>
-              <button type="button" onClick={() => setShowModalNueva(false)} className="p-1 bg-white/15 rounded-full"><X className="w-4 h-4" /></button>
+              <button type="button" aria-label="Cerrar formulario" onClick={() => setShowModalNueva(false)} className="p-1 bg-white/15 rounded-full"><X className="w-4 h-4" /></button>
             </div>
             <div className="p-4 overflow-y-auto space-y-2.5 text-xs">
-              <input required placeholder="Título de la iniciativa *" value={nuevaIdea.titulo} onChange={e => setNuevaIdea({...nuevaIdea, titulo: e.target.value})} className="w-full border rounded-lg p-2 font-semibold" />
+              <div className="rounded-xl bg-blue-50 p-3 text-xs leading-relaxed text-[#1E298B]">
+                <strong>Equipo postulante:</strong> {integrantes.map(persona => persona.nombre).join(', ')}
+              </div>
+              <input required aria-label="Título de la iniciativa" placeholder="Título de la iniciativa *" value={nuevaIdea.titulo} onChange={e => setNuevaIdea({...nuevaIdea, titulo: e.target.value})} className="w-full border rounded-lg p-2 font-semibold" />
+              <input aria-label="Nombre del equipo" placeholder="Nombre del equipo (opcional)" value={nuevaIdea.equipo} onChange={e => setNuevaIdea({...nuevaIdea, equipo: e.target.value})} className="w-full border rounded-lg p-2" />
               <div className="grid grid-cols-2 gap-2">
-                <select value={nuevaIdea.sedeOrigen} onChange={e => setNuevaIdea({...nuevaIdea, sedeOrigen: e.target.value})} className="border rounded-lg p-2">
-                  <option>Taller Bosa</option><option>El Gran San</option><option>Administración</option>
+                <select aria-label="Sede de origen" value={nuevaIdea.sedeOrigen} onChange={e => setNuevaIdea({...nuevaIdea, sedeOrigen: e.target.value})} className="border rounded-lg p-2">
+                  <option>Taller Bosa</option><option>El Gran San</option>
                 </select>
-                <select value={nuevaIdea.frente} onChange={e => setNuevaIdea({...nuevaIdea, frente: e.target.value})} className="border rounded-lg p-2">
+                <select aria-label="Frente de innovación" value={nuevaIdea.frente} onChange={e => setNuevaIdea({...nuevaIdea, frente: e.target.value})} className="border rounded-lg p-2">
                   {FRENTES_FASE_1.map(f => <option key={f}>{f}</option>)}
                 </select>
               </div>
-              <textarea required rows={2} placeholder="1. Problema u oportunidad identificada *" value={nuevaIdea.problema} onChange={e => setNuevaIdea({...nuevaIdea, problema: e.target.value})} className="w-full border rounded-lg p-2" />
-              <textarea rows={2} placeholder="2. Propuesta de solución detallada" value={nuevaIdea.solucion} onChange={e => setNuevaIdea({...nuevaIdea, solucion: e.target.value})} className="w-full border rounded-lg p-2" />
-              <input placeholder="3. Justificación (vínculo con Visión 2028)" value={nuevaIdea.justificacion} onChange={e => setNuevaIdea({...nuevaIdea, justificacion: e.target.value})} className="w-full border rounded-lg p-2" />
-              <input placeholder="4. Propuesta de valor (cliente o empresa)" value={nuevaIdea.valor} onChange={e => setNuevaIdea({...nuevaIdea, valor: e.target.value})} className="w-full border rounded-lg p-2" />
-              <input placeholder="5. Recursos requeridos" value={nuevaIdea.recursos} onChange={e => setNuevaIdea({...nuevaIdea, recursos: e.target.value})} className="w-full border rounded-lg p-2" />
-              <input placeholder="6. Viabilidad técnica y operativa" value={nuevaIdea.viabilidad} onChange={e => setNuevaIdea({...nuevaIdea, viabilidad: e.target.value})} className="w-full border rounded-lg p-2" />
-              <input placeholder="7. Potencial comercial o ahorro" value={nuevaIdea.potencial} onChange={e => setNuevaIdea({...nuevaIdea, potencial: e.target.value})} className="w-full border rounded-lg p-2" />
-              <input placeholder="8. Prototipo o muestra física" value={nuevaIdea.prototipo} onChange={e => setNuevaIdea({...nuevaIdea, prototipo: e.target.value})} className="w-full border rounded-lg p-2" />
+              <textarea required rows={2} aria-label="Problema u oportunidad" placeholder="1. Problema u oportunidad identificada *" value={nuevaIdea.problema} onChange={e => setNuevaIdea({...nuevaIdea, problema: e.target.value})} className="w-full border rounded-lg p-2" />
+              <textarea required rows={2} aria-label="Propuesta de solución" placeholder="2. Propuesta de solución detallada *" value={nuevaIdea.solucion} onChange={e => setNuevaIdea({...nuevaIdea, solucion: e.target.value})} className="w-full border rounded-lg p-2" />
+              <textarea required rows={2} aria-label="Justificación estratégica" placeholder="3. Justificación estratégica y vínculo con Visión 2028 *" value={nuevaIdea.justificacion} onChange={e => setNuevaIdea({...nuevaIdea, justificacion: e.target.value})} className="w-full border rounded-lg p-2" />
+              <textarea required rows={2} aria-label="Propuesta de valor" placeholder="4. Propuesta de valor para el cliente o la empresa *" value={nuevaIdea.valor} onChange={e => setNuevaIdea({...nuevaIdea, valor: e.target.value})} className="w-full border rounded-lg p-2" />
+              <textarea required rows={2} aria-label="Recursos requeridos" placeholder="5. Recursos requeridos *" value={nuevaIdea.recursos} onChange={e => setNuevaIdea({...nuevaIdea, recursos: e.target.value})} className="w-full border rounded-lg p-2" />
+              <textarea required rows={2} aria-label="Viabilidad técnica" placeholder="6. Viabilidad técnica y operativa *" value={nuevaIdea.viabilidad} onChange={e => setNuevaIdea({...nuevaIdea, viabilidad: e.target.value})} className="w-full border rounded-lg p-2" />
+              <textarea required rows={2} aria-label="Potencial comercial" placeholder="7. Potencial comercial o ahorro *" value={nuevaIdea.potencial} onChange={e => setNuevaIdea({...nuevaIdea, potencial: e.target.value})} className="w-full border rounded-lg p-2" />
+              <textarea required rows={2} aria-label="Prototipo o muestra" placeholder="8. Prototipo o representación de la idea *" value={nuevaIdea.prototipo} onChange={e => setNuevaIdea({...nuevaIdea, prototipo: e.target.value})} className="w-full border rounded-lg p-2" />
               <button type="submit" className="w-full bg-[#1E298B] text-white font-bold py-2.5 rounded-xl shadow mt-2">Guardar Propuesta</button>
             </div>
           </form>
@@ -80,7 +84,7 @@ export function Modals({
           <div role="dialog" aria-modal="true" className="flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
             <div className="bg-[#1E298B] text-white p-4 flex items-center justify-between">
               <h3 className="font-black text-sm">Identidad Estratégica DJS²</h3>
-              <button onClick={() => setShowModalEstrategia(false)} className="p-1 bg-white/15 rounded-full"><X className="w-4 h-4" /></button>
+              <button type="button" aria-label="Cerrar información estratégica" onClick={() => setShowModalEstrategia(false)} className="p-1 bg-white/15 rounded-full"><X className="w-4 h-4" /></button>
             </div>
             <div className="p-4 overflow-y-auto space-y-3 text-xs leading-relaxed">
               <div className="bg-blue-50 p-3 rounded-xl">
